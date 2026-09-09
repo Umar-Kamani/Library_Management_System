@@ -1,3 +1,5 @@
+package Models;
+
 public class book {
     private int id;
     private String title;
@@ -21,11 +23,27 @@ public class book {
     }
 
     public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+
     public String getTitle() {return title;}
+    public void setTitle(String title) {this.title = title;}
+
     public String getAuthor() {return author;}
+    public void setAuthor(String author) {this.author = author;}
+
     public String getIsbn() {return isbn;}
+    public void setIsbn(String isbn) {this.isbn = isbn;}
+
     public int getGenreId() {return genreid;}
+    public void setGenreId(int genreId) {this.genreid = genreId;}
+
     public int getLocationId() {return locationid;}
+    public void setLocationId(int locationId) {this.locationid = locationId;}
+
     public int getTotalCopies() {return totalcopies;}
+    public void setTotalCopies(int totalCopies) {this.totalcopies = totalcopies;}
+
     public int getAvailableCopies() {return availablecopies;}
+    public void setAvailableCopies(int availableCopies) {this.availablecopies = availablecopies;}
+
 }
