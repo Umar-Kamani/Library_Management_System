@@ -25,5 +25,9 @@ public abstract class user {
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
 
+    public abstract int getMaxBooks();
+    public abstract int getLoanDurationDays();
+    public abstract String getRole();
+
 
 }

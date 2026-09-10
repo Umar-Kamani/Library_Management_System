@@ -6,5 +6,16 @@ public class student extends user {
         super(id, name, phone, email);
     }
 
+    @Override public int getMaxBooks() {
+        return 3;
+    };
+    @Override public int getLoanDurationDays() {
+        return 14;
+    };
+    @Override public String getRole() {
+        return "Student";
+    };
+
 }
+
 

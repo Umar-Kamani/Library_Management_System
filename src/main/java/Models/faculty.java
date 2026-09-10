@@ -6,4 +6,14 @@ public class faculty extends user {
         super(id, name, phone, email);
     }
 
+    @Override public int getMaxBooks() {
+        return 10;
+    };
+    @Override public int getLoanDurationDays() {
+        return 30;
+    };
+    @Override public String getRole() {
+        return "Faculty";
+    };
+
 }
