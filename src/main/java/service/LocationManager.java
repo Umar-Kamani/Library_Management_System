@@ -14,5 +14,8 @@ public class LocationManager {
         // this helps us to insert a new row into the locations table
         String sql = "INSERT INTO locations (name) VALUES (?)";
 
+        try (Connection conn = dbUtils.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
 
 }
