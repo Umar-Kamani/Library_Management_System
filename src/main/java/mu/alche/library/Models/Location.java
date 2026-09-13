@@ -1,8 +1,8 @@
-package Models;
+package mu.alche.library.Models;
 
 public class Location {
 
-        //this is the  unique book id
+        //this is the  unique Book id
         private int id;
 
         // the actual location name, e.g. "Shelf A2" or "Floor 1 - Reference Section"

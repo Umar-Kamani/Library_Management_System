@@ -1,4 +1,4 @@
-package Models;
+package mu.alche.library.Models;
 
 import java.time.LocalDate;
 

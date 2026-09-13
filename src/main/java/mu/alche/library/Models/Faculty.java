@@ -1,8 +1,8 @@
-package Models;
+package mu.alche.library.Models;
 
-public class faculty extends user {
+public class Faculty extends User {
 
-    public faculty(int id, String name, String phone, String email){
+    public Faculty(int id, String name, String phone, String email){
         super(id, name, phone, email);
     }
 
