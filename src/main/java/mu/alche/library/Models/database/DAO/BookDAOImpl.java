@@ -3,10 +3,7 @@ package mu.alche.library.Models.database.DAO;
 import mu.alche.library.Models.Book;
 import mu.alche.library.Models.database.DBUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,8 +157,7 @@ public class BookDAOImpl implements BookDAO {
     public List<Book> findByLocation(int locationId) throws SQLException {
 
         String sql = """
-            
-                SELECT b.*
+            SELECT b.*
             FROM book b
             JOIN location g ON b.book_location_id = g.location_id
             WHERE g.location_name LIKE ?
@@ -259,7 +255,30 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public Book create(Book book) throws SQLException {
 
-        return null;
+        String sql = """
+            
+                INSERT INTO book (book_name, book_isbn, book_genre_id, book_location_id, 
+                                  total_copies, available_copies, book_author) VALUES (?, ?, ?, ?, ?, ?, ?)""";
+
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
+
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getIsbn());
+            ps.setInt(3, book.getGenreId());
+            ps.setInt(4, book.getLocationId());
+            ps.setInt(5, book.getTotalCopies());
+            ps.setInt(6, book.getAvailableCopies());
+            ps.setString(7, book.getAuthor());
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) book.setId(keys.getInt(1));
+            }
+            return book;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create book", e);
+        }
     }
 
     @Override
