@@ -148,12 +148,93 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public List<Book> findByLocation(int locationId) throws SQLException {
-        return List.of();
+
+        Connection connection = DBUtils.getConnection();
+
+        String sql = """
+            SELECT b.*
+            FROM book b
+            JOIN location g ON b.book_location_id = g.location_id
+            WHERE g.location_name LIKE ?
+            """;
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, "%" + locationId + "%");
+
+
+        ResultSet rs = ps.executeQuery();
+
+        List<Book> books = new ArrayList<>();
+
+        while (rs.next()) {
+
+            int id = rs.getInt("book_id");
+            String isbn = rs.getString("book_isbn");
+            String name = rs.getString("book_name");
+            String bookAuthor = rs.getString("book_author");
+            int bookgenre = rs.getInt("book_genre_id");
+            int location = rs.getInt("book_location_id");
+            int totalCopies = rs.getInt("total_copies");
+            int availableCopies = rs.getInt("available_copies");
+
+            Book book = new Book(
+                    id,
+                    name,
+                    bookAuthor,
+                    isbn,
+                    bookgenre,
+                    location,
+                    totalCopies,
+                    availableCopies
+            );
+
+            books.add(book);
+        }
+
+        return books;
     }
 
     @Override
     public List<Book> findByIsbn(String isbn) throws SQLException {
-        return List.of();
+
+        Connection connection = DBUtils.getConnection();
+
+        String sql = "SELECT * FROM book WHERE book_isbn LIKE ?";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, "%" + isbn + "%");
+
+
+        ResultSet rs = ps.executeQuery();
+
+        List<Book> books = new ArrayList<>();
+
+        while (rs.next()) {
+
+            int id = rs.getInt("book_id");
+            String bookisbn = rs.getString("book_isbn");
+            String name = rs.getString("book_name");
+            String bookAuthor = rs.getString("book_author");
+            int genre = rs.getInt("book_genre_id");
+            int location = rs.getInt("book_location_id");
+            int totalCopies = rs.getInt("total_copies");
+            int availableCopies = rs.getInt("available_copies");
+
+            Book book = new Book(
+                    id,
+                    name,
+                    bookAuthor,
+                    isbn,
+                    genre,
+                    location,
+                    totalCopies,
+                    availableCopies
+            );
+
+            books.add(book);
+        }
+
+        return books;
     }
 
     @Override
