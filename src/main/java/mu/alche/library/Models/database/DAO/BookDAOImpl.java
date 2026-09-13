@@ -239,6 +239,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public Book create(Book book) throws SQLException {
+
         return null;
     }
 
@@ -254,11 +255,82 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public Book get(int id) throws SQLException {
-        return null;
+
+        Connection connection = DBUtils.getConnection();
+
+        String sql = "SELECT * FROM book WHERE book_id = ?";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, "%" + id + "%");
+
+
+        ResultSet rs = ps.executeQuery();
+
+
+        Book book = null;
+        if (rs.next()) {
+
+            int oid = rs.getInt("book_id");
+            String isbn = rs.getString("book_isbn");
+            String name = rs.getString("book_name");
+            String bookAuthor = rs.getString("book_author");
+            int genre = rs.getInt("book_genre_id");
+            int location = rs.getInt("book_location_id");
+            int totalCopies = rs.getInt("total_copies");
+            int availableCopies = rs.getInt("available_copies");
+
+            book = new Book(
+                    id,
+                    name,
+                    bookAuthor,
+                    isbn,
+                    genre,
+                    location,
+                    totalCopies,
+                    availableCopies
+            );
+        }
+        return book;
     }
 
     @Override
     public List<Book> getAll() throws SQLException {
-        return List.of();
+
+        Connection connection = DBUtils.getConnection();
+
+        String sql = "SELECT * FROM book";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+
+        ResultSet rs = ps.executeQuery();
+
+        List<Book> books = new ArrayList<>();
+
+        while (rs.next()) {
+
+            int id = rs.getInt("book_id");
+            String isbn = rs.getString("book_isbn");
+            String title = rs.getString("book_name");
+            String bookAuthor = rs.getString("book_author");
+            int genre = rs.getInt("book_genre_id");
+            int location = rs.getInt("book_location_id");
+            int totalCopies = rs.getInt("total_copies");
+            int availableCopies = rs.getInt("available_copies");
+
+            Book book = new Book(
+                    id,
+                    title,
+                    bookAuthor,
+                    isbn,
+                    genre,
+                    location,
+                    totalCopies,
+                    availableCopies
+            );
+
+            books.add(book);
+        }
+
+        return books;
     }
 }
