@@ -1,6 +1,6 @@
-package Models;
+package mu.alche.library.Models;
 
-public class book {
+public class Book {
     private int id;
     private String title;
     private String author;
@@ -10,7 +10,7 @@ public class book {
     private int totalcopies;
     private int availablecopies;
 
-    public book(int id, String title, String author, String isbn, int genreId,
+    public Book(int id, String title, String author, String isbn, int genreId,
                 int locationId, int totalCopies, int availableCopies) {
         this.id = id;
         this.title = title;
@@ -45,5 +45,20 @@ public class book {
 
     public int getAvailableCopies() {return availablecopies;}
     public void setAvailableCopies(int availableCopies) {this.availablecopies = availablecopies;}
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", genre=" + genreid +
+                ", location=" + locationid +
+                ", totalCopies=" + totalcopies +
+                ", availableCopies=" + availablecopies +
+                '}';
+    }
+
 
 }
