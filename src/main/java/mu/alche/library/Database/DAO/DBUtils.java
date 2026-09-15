@@ -1,4 +1,4 @@
-package mu.alche.library;
+package mu.alche.library.Database.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

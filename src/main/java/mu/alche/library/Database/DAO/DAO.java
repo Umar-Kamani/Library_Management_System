@@ -1,4 +1,4 @@
-package mu.alche.library.DAO;
+package mu.alche.library.Database.DAO;
 import java.sql.SQLException;
 import java.util.List;
 

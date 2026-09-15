@@ -1,7 +1,7 @@
-package mu.alche.library.Impl;
+package mu.alche.library.Database.DAO.Impl;
 
 import mu.alche.library.Models.Borrowing;
-import mu.alche.library.DAO.BorrowingDAO;
+import mu.alche.library.Database.DAO.BorrowingDAO;
 import mu.alche.library.Database.DBUtils;
 
 import java.sql.*;

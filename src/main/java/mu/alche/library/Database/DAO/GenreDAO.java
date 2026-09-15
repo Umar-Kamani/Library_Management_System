@@ -1,4 +1,4 @@
-package mu.alche.library.DAO;
+package mu.alche.library.Database.DAO;
 
 import mu.alche.library.Models.Genre;
 
