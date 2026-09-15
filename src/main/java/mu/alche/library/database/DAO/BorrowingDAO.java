@@ -1,4 +1,4 @@
-package mu.alche.library.database.DAO;
+package mu.alche.library.Database.DAO;
 
 import mu.alche.library.Models.Borrowing;
 
