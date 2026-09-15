@@ -1,7 +1,8 @@
-package mu.alche.library.Models.database.DAO;
+package mu.alche.library.database.DAO.Impl;
 
 import mu.alche.library.Models.Book;
-import mu.alche.library.Models.database.DBUtils;
+import mu.alche.library.database.DAO.BookDAO;
+import mu.alche.library.database.DBUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
