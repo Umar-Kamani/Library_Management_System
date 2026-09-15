@@ -21,44 +21,55 @@ public class MainWindow {
         panel = new JPanel();
 
         JPanel headerPanel = new JPanel(); //The header element of the page
-        JPanel gridPanel = new JPanel(new GridLayout(0,4,10,10)); //The grid of button on the homepage
-
+        JPanel homebtnPanel = new JPanel(new GridLayout(0,3,20,20)); //The grid of button on the homepage
+        JPanel homebtncontainer = new JPanel();
 
         //
-        JButton btn1 = new JButton("Books");
-        JButton btn2 = new JButton("Borrowings");
-        JButton btn3 = new JButton("Genres");
-        JButton btn4 = new JButton("Locations");
-        JButton btn5 = new JButton("Add Book");
-        JButton btn6 = new JButton("Add Borrowing");
-        JButton btn7 = new JButton("Add Genre");
-        JButton btn8 = new JButton("Add Location");
+        JButton btn1 = createButton("Books");
+        JButton btn2 = createButton("Borrowings");
+        JButton btn3 = createButton("Genres");
+        JButton btn4 = createButton("Locations");
+        JButton btn5 = createButton("Authors");
+        JButton btn6 = createButton("Users");
 
-        gridPanel.setBackground(Color.WHITE);
-        gridPanel.add(btn1);
-        gridPanel.add(btn2);
-        gridPanel.add(btn3);
-        gridPanel.add(btn4);
-        gridPanel.add(btn5);
-        gridPanel.add(btn6);
-        gridPanel.add(btn7);
-        gridPanel.add(btn8);
+        homebtnPanel.add(btn1);
+        homebtnPanel.add(btn2);
+        homebtnPanel.add(btn3);
+        homebtnPanel.add(btn4);
+        homebtnPanel.add(btn5);
+        homebtnPanel.add(btn6);
+        homebtnPanel.setPreferredSize(new Dimension(600,400));
 
-        headerPanel.setBackground(Color.LIGHT_GRAY);
+        JLabel title = new JLabel("Library Management System");
+        title.setHorizontalAlignment(JLabel.CENTER);
+        title.setForeground(Color.white);
+        title.setFont(new Font("Arial", Font.BOLD, 50));
+
+
+
+        headerPanel.setBackground(Color.decode("#273c75"));
+        headerPanel.add(title);
 
 
         Border padding = BorderFactory.createEmptyBorder(20,20,20,20);
-        gridPanel.setBorder(padding);
+        homebtnPanel.setBorder(padding);
+
+        homebtncontainer.add(homebtnPanel);
 
         frame.add(headerPanel, BorderLayout.NORTH);
-        frame.add(gridPanel, BorderLayout.CENTER);
+        frame.add(homebtncontainer, BorderLayout.CENTER);
 
     }
 
-    private JButton createButton() {
+    private JButton createButton(String btn_title) {
 
-        JButton btn = new JButton("Book");
-
+        JButton btn = new JButton(btn_title);
+        btn.setFocusPainted(false);
+        btn.setBackground(Color.decode("#192a56"));
+        btn.setBorderPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setFont(new Font("Arial", Font.BOLD, 20));
+        btn.setForeground(Color.white);
         return btn;
     }
 
