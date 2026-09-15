@@ -29,5 +29,5 @@ public abstract class User {
     public abstract int getLoanDurationDays();
     public abstract String getRole();
 
-
+theuuete
 }
