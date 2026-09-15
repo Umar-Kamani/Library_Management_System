@@ -15,9 +15,8 @@ public class BookDAOImpl implements BookDAO {
 
         List<Book> books;
         try (Connection connection = DBUtils.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-
+             PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setString(1, "%" + author + "%");
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -60,9 +59,8 @@ public class BookDAOImpl implements BookDAO {
         List<Book> books;
 
         try (Connection connection = DBUtils.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-
+             PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setString(1, "%" + title + "%");
 
 
@@ -113,11 +111,9 @@ public class BookDAOImpl implements BookDAO {
         List<Book> books;
 
         try(Connection connection = DBUtils.getConnection();
-            PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-
+            PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setString(1, "%" + genre + "% ");
-
 
             try(ResultSet rs = ps.executeQuery()) {
 
@@ -166,11 +162,9 @@ public class BookDAOImpl implements BookDAO {
 
         ArrayList<Book> books;
         try(Connection connection = DBUtils.getConnection();
-            PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-
+            PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setString(1, "%" + locationId + "%");
-
 
             try(ResultSet rs = ps.executeQuery()) {
 
@@ -212,11 +206,9 @@ public class BookDAOImpl implements BookDAO {
         List<Book> books;
 
         try (Connection connection = DBUtils.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-
+             PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setString(1, "%" + isbn + "%");
-
 
             try (ResultSet rs = ps.executeQuery()) {
 
@@ -256,40 +248,67 @@ public class BookDAOImpl implements BookDAO {
     public Book create(Book book) throws SQLException {
 
         String sql = """
-            
                 INSERT INTO book (book_name, book_isbn, book_genre_id, book_location_id, 
                                   total_copies, available_copies, book_author) VALUES (?, ?, ?, ?, ?, ?, ?)""";
 
         try (Connection connection = DBUtils.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
-        ) {
+             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
+            {
 
-            ps.setString(1, book.getTitle());
-            ps.setString(2, book.getIsbn());
-            ps.setInt(3, book.getGenreId());
-            ps.setInt(4, book.getLocationId());
-            ps.setInt(5, book.getTotalCopies());
-            ps.setInt(6, book.getAvailableCopies());
-            ps.setString(7, book.getAuthor());
-            ps.executeUpdate();
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) book.setId(keys.getInt(1));
+                ps.setString(1, book.getTitle());
+                ps.setString(2, book.getIsbn());
+                ps.setInt(3, book.getGenreId());
+                ps.setInt(4, book.getLocationId());
+                ps.setInt(5, book.getTotalCopies());
+                ps.setInt(6, book.getAvailableCopies());
+                ps.setString(7, book.getAuthor());
+                ps.executeUpdate();
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) book.setId(keys.getInt(1));
+                }
+                return book;
+            } catch (SQLException e) {
+                throw new RuntimeException("Failed to create book", e);
             }
-            return book;
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to create book", e);
-        }
     }
 
     @Override
-    public Book update(Book book) throws SQLException {
-        return null;
+    public void update(Book book) throws SQLException {
+        String sql = """
+                        UPDATE book SET book_name=?, book_author=?, book_isbn=?, book_genre_id=?, book_location_id=?, 
+                                        total_copies=?, available_copies=? WHERE book_id=?""";
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql))
+            {
+                ps.setString(1, book.getTitle());
+                ps.setString(2, book.getAuthor());
+                ps.setString(3, book.getIsbn());
+                ps.setInt(4, book.getGenreId());
+                ps.setInt(5, book.getLocationId());
+                ps.setInt(6, book.getTotalCopies());
+                ps.setInt(7, book.getAvailableCopies());
+                ps.setInt(8, book.getId());
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException("Failed to update book", e);
+            }
     }
 
     @Override
     public void delete(Book book) throws SQLException {
+        String sql = "DELETE FROM book WHERE book_id=?";
+
+        try (Connection connection = DBUtils.getConnection();
+        PreparedStatement ps = connection.prepareStatement(sql))
+        {
+            ps.setInt(1, book.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete book", e);
+        }
 
     }
+
 
     @Override
     public Book get(int id) throws SQLException {
