@@ -25,7 +25,7 @@ public class GenreDAOImpl implements GenreDAO {
     }
 
     @Override
-    public Genre update(Genre genre) throws SQLException {
+    public void update(Genre genre) throws SQLException {
         String sql = "UPDATE genre SET genre_name = ? WHERE genre_id = ?";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -33,7 +33,6 @@ public class GenreDAOImpl implements GenreDAO {
             ps.setInt(2, genre.getId());
             ps.executeUpdate();
         }
-        return genre;
     }
 
     @Override
