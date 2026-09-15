@@ -1,6 +1,6 @@
 import mu.alche.library.Models.Book;
-import mu.alche.library.Database.DAO.BookDAO;
-import mu.alche.library.Database.DAO.Impl.BookDAOImpl;
+import mu.alche.library.DAO.BookDAO;
+import mu.alche.library.Impl.BookDAOImpl;
 import mu.alche.library.Database.DBUtils;
 
 import java.sql.Connection;
