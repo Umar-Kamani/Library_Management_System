@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class UIComponents {
 
-    public static JButton createButton(String btn_title, String btn_color) {
+    public static JButton createButton(String btn_title, String btn_color, String btn_title_color) {
 
         JButton btn = new JButton(btn_title);
         btn.setFocusPainted(false);
@@ -13,7 +13,7 @@ public class UIComponents {
         btn.setBorderPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setFont(new Font("Arial", Font.BOLD, 20));
-        btn.setForeground(Color.white);
+        btn.setForeground(Color.decode(btn_title_color));
         return btn;
     }
 
