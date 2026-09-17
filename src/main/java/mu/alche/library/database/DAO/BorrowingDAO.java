@@ -8,4 +8,4 @@ import java.util.List;
 public interface BorrowingDAO extends DAO<Borrowing> {
     List<Borrowing> findByUser(int userId) throws SQLException;
     List<Borrowing> findOverdue() throws SQLException;
-}
+} 
