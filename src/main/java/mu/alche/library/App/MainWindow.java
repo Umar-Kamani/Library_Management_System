@@ -41,12 +41,12 @@ public class MainWindow {
         JPanel homebtncontainer = new JPanel();
 
         // Buttons
-        JButton btn1 = UIComponents.createButton("Books", "#192a56");
-        JButton btn2 = UIComponents.createButton("Borrowings", "#192a56");
-        JButton btn3 = UIComponents.createButton("Genres", "#192a56");
-        JButton btn4 = UIComponents.createButton("Locations", "#192a56");
-        JButton btn5 = UIComponents.createButton("Authors", "#192a56");
-        JButton btn6 = UIComponents.createButton("Users", "#192a56");
+        JButton btn1 = UIComponents.createButton("Books", "#192a56", "#ffffff");
+        JButton btn2 = UIComponents.createButton("Borrowings", "#192a56", "#ffffff");
+        JButton btn3 = UIComponents.createButton("Genres", "#192a56", "#ffffff");
+        JButton btn4 = UIComponents.createButton("Locations", "#192a56", "#ffffff");
+        JButton btn5 = UIComponents.createButton("Authors", "#192a56", "#ffffff");
+        JButton btn6 = UIComponents.createButton("Users", "#192a56", "#ffffff");
 
         // Add buttons
         homebtnPanel.add(btn1);
