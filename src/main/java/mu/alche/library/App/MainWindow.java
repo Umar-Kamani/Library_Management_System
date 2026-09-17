@@ -1,9 +1,11 @@
 package mu.alche.library.App;
 
+import mu.alche.library.UI.BooksPanel;
+import mu.alche.library.UI.UIComponents;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-
 
 public class MainWindow {
 
@@ -11,21 +13,34 @@ public class MainWindow {
     private final JPanel panel;
 
     public MainWindow() {
+
         frame = new JFrame();
         frame.setTitle("Library Management System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,500);
+        frame.setSize(800, 500);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
 
-        panel = new JPanel();
+        panel = new JPanel(new BorderLayout());
 
-        //Different panels
-        JPanel headerPanel = new JPanel(); //The header element of the page
-        JPanel homebtnPanel = new JPanel(new GridLayout(0,3,20,20)); //The grid of button on the homepage
-        JPanel homebtncontainer = new JPanel(); //Main Container
+        showHomePanel();
+    }
 
-        //button components that lead to the separate menus
+    // =========================
+    // HOME PANEL
+    // =========================
+    public void showHomePanel() {
+
+        panel.removeAll();
+
+        // Header
+        JPanel headerPanel = new JPanel();
+
+        // Home buttons
+        JPanel homebtnPanel = new JPanel(new GridLayout(0, 3, 20, 20));
+        JPanel homebtncontainer = new JPanel();
+
+        // Buttons
         JButton btn1 = UIComponents.createButton("Books", "#192a56");
         JButton btn2 = UIComponents.createButton("Borrowings", "#192a56");
         JButton btn3 = UIComponents.createButton("Genres", "#192a56");
@@ -33,40 +48,79 @@ public class MainWindow {
         JButton btn5 = UIComponents.createButton("Authors", "#192a56");
         JButton btn6 = UIComponents.createButton("Users", "#192a56");
 
+        // Add buttons
         homebtnPanel.add(btn1);
         homebtnPanel.add(btn2);
         homebtnPanel.add(btn3);
         homebtnPanel.add(btn4);
         homebtnPanel.add(btn5);
         homebtnPanel.add(btn6);
-        homebtnPanel.setPreferredSize(new Dimension(600,400));
 
+        homebtnPanel.setPreferredSize(new Dimension(600, 400));
 
-        //Title label for the header panel
+        // Title
         JLabel title = new JLabel("Library Management System");
         title.setHorizontalAlignment(JLabel.CENTER);
-        title.setForeground(Color.white);
+        title.setForeground(Color.WHITE);
         title.setFont(new Font("Arial", Font.BOLD, 50));
+
         headerPanel.add(title);
-
-
-        //Background Colour of header panel
         headerPanel.setBackground(Color.decode("#273c75"));
 
+        // Padding
+        Border padding = BorderFactory.createEmptyBorder(
+                20, 20, 20, 20
+        );
 
-        //Setting padding for homebtnpanel
-        Border padding = BorderFactory.createEmptyBorder(20,20,20,20);
         homebtnPanel.setBorder(padding);
 
         homebtncontainer.add(homebtnPanel);
 
-        //Adding elements to the frame
-        frame.add(headerPanel, BorderLayout.NORTH);
-        frame.add(homebtncontainer, BorderLayout.CENTER);
-        frame.add(BooksPanel.BooksPanel(), BorderLayout.CENTER);
+        // Books button
+        btn1.addActionListener(e -> showBooksPanel());
+
+        // Add Home to main panel
+        panel.add(headerPanel, BorderLayout.NORTH);
+        panel.add(homebtncontainer, BorderLayout.CENTER);
+
+        refreshPanel();
     }
 
+
+    // =========================
+    // BOOKS PANEL
+    // =========================
+    private void showBooksPanel() {
+
+        panel.removeAll();
+
+        panel.add(
+                BooksPanel.BooksPanel(this),
+                BorderLayout.CENTER
+        );
+
+        refreshPanel();
+    }
+
+
+    // =========================
+    // REFRESH GUI
+    // =========================
+    private void refreshPanel() {
+
+        frame.setContentPane(panel);
+
+        panel.revalidate();
+        panel.repaint();
+
+        frame.setVisible(true);
+    }
+
+
+    // =========================
+    // SHOW WINDOW
+    // =========================
     public void show() {
         frame.setVisible(true);
-    };
+    }
 }
