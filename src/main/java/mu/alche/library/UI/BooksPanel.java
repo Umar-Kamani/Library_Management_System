@@ -29,13 +29,7 @@ public class BooksPanel {
 
         // HOME BUTTON
 
-        JButton homeButton = new JButton("Home");
-
-        homeButton.setFont(
-                new Font("Arial", Font.BOLD, 16)
-        );
-
-        homeButton.setFocusPainted(false);
+        JButton homeButton = UIComponents.createButton("Home", "#ffffff","#192a56");
 
         homeButton.addActionListener(e -> {
             mainWindow.showHomePanel();
@@ -66,47 +60,22 @@ public class BooksPanel {
         // =========================
 
         JPanel buttonPanel =
-                new JPanel(
-                        new GridLayout(3, 1, 10, 10)
-                );
+                new JPanel(new GridLayout(0, 1, 10, 10));
 
-        buttonPanel.setBackground(
-                Color.decode("#273c75")
-        );
+        buttonPanel.setBackground(Color.decode("#273c75"));
 
-        buttonPanel.setBorder(
-                new EmptyBorder(
-                        20, 15, 20, 15
-                )
-        );
+        buttonPanel.setBorder(new EmptyBorder(20, 15, 20, 15));
 
 
-        JButton newButton = new JButton("New");
-        JButton editButton = new JButton("Edit");
-        JButton deleteButton = new JButton("Delete");
-
-
-        newButton.setFont(
-                new Font("Arial", Font.BOLD, 16)
-        );
-
-        editButton.setFont(
-                new Font("Arial", Font.BOLD, 16)
-        );
-
-        deleteButton.setFont(
-                new Font("Arial", Font.BOLD, 16)
-        );
-
-
-        newButton.setFocusPainted(false);
-        editButton.setFocusPainted(false);
-        deleteButton.setFocusPainted(false);
+        JButton newButton =UIComponents.createButton("New", "#ffffff","#192a56");
+        JButton editButton =UIComponents.createButton("Edit","#ffffff","#192a56");
+        JButton deleteButton =UIComponents.createButton ("Delete", "#ffffff","#192a56");
 
 
         buttonPanel.add(newButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(homeButton);
 
 
         buttonPanel.setPreferredSize(
