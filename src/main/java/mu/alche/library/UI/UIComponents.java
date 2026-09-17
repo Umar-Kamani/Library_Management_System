@@ -1,4 +1,4 @@
-package mu.alche.library.App;
+package mu.alche.library.UI;
 
 import javax.swing.*;
 import java.awt.*;
