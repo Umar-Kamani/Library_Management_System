@@ -20,17 +20,18 @@ public class MainWindow {
 
         panel = new JPanel();
 
+        //Different panels
         JPanel headerPanel = new JPanel(); //The header element of the page
         JPanel homebtnPanel = new JPanel(new GridLayout(0,3,20,20)); //The grid of button on the homepage
-        JPanel homebtncontainer = new JPanel();
+        JPanel homebtncontainer = new JPanel(); //Main Container
 
-        //
-        JButton btn1 = createButton("Books");
-        JButton btn2 = createButton("Borrowings");
-        JButton btn3 = createButton("Genres");
-        JButton btn4 = createButton("Locations");
-        JButton btn5 = createButton("Authors");
-        JButton btn6 = createButton("Users");
+        //button components that lead to the separate menus
+        JButton btn1 = UIComponents.createButton("Books", "#192a56");
+        JButton btn2 = UIComponents.createButton("Borrowings", "#192a56");
+        JButton btn3 = UIComponents.createButton("Genres", "#192a56");
+        JButton btn4 = UIComponents.createButton("Locations", "#192a56");
+        JButton btn5 = UIComponents.createButton("Authors", "#192a56");
+        JButton btn6 = UIComponents.createButton("Users", "#192a56");
 
         homebtnPanel.add(btn1);
         homebtnPanel.add(btn2);
@@ -40,37 +41,29 @@ public class MainWindow {
         homebtnPanel.add(btn6);
         homebtnPanel.setPreferredSize(new Dimension(600,400));
 
+
+        //Title label for the header panel
         JLabel title = new JLabel("Library Management System");
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setForeground(Color.white);
         title.setFont(new Font("Arial", Font.BOLD, 50));
-
-
-
-        headerPanel.setBackground(Color.decode("#273c75"));
         headerPanel.add(title);
 
 
+        //Background Colour of header panel
+        headerPanel.setBackground(Color.decode("#273c75"));
+
+
+        //Setting padding for homebtnpanel
         Border padding = BorderFactory.createEmptyBorder(20,20,20,20);
         homebtnPanel.setBorder(padding);
 
         homebtncontainer.add(homebtnPanel);
 
+        //Adding elements to the frame
         frame.add(headerPanel, BorderLayout.NORTH);
         frame.add(homebtncontainer, BorderLayout.CENTER);
-
-    }
-
-    private JButton createButton(String btn_title) {
-
-        JButton btn = new JButton(btn_title);
-        btn.setFocusPainted(false);
-        btn.setBackground(Color.decode("#192a56"));
-        btn.setBorderPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setFont(new Font("Arial", Font.BOLD, 20));
-        btn.setForeground(Color.white);
-        return btn;
+        frame.add(BooksPanel.BooksPanel(), BorderLayout.CENTER);
     }
 
     public void show() {
