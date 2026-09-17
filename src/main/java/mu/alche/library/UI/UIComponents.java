@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class UIComponents {
 
-    static JButton createButton(String btn_title, String btn_color) {
+    public static JButton createButton(String btn_title, String btn_color) {
 
         JButton btn = new JButton(btn_title);
         btn.setFocusPainted(false);
