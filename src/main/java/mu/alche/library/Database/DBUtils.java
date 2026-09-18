@@ -18,7 +18,7 @@ public class DBUtils {
         String[] schema = {
 
                 // Create database
-                "CREATE DATABASE IF NOT EXISTS",
+                "CREATE DATABASE IF NOT EXISTS alche_library",
 
                 // Select database
                 "USE alche_library",

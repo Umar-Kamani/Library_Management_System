@@ -19,9 +19,9 @@ public class BorrowingDAOImpl implements BorrowingDAO {
              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, b.getUserId());
             ps.setInt(2, b.getBookId());
-            ps.setString(3, b.getBorrowDate().toString());
-            ps.setString(4, b.getDueDate().toString());
-            ps.setString(5, b.getReturnDate() != null ? b.getReturnDate().toString() : "");
+            ps.setDate(3, Date.valueOf(b.getBorrowDate()));
+            ps.setDate(4, Date.valueOf(b.getDueDate()));
+            ps.setDate(5, b.getReturnDate() != null ? Date.valueOf(b.getReturnDate()) : null);
             ps.setString(6, b.getStatus());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
@@ -36,7 +36,7 @@ public class BorrowingDAOImpl implements BorrowingDAO {
         String sql = "UPDATE borrowing SET return_date = ?, status = ? WHERE borrowing_id = ?";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, b.getReturnDate() != null ? b.getReturnDate().toString() : "");
+            ps.setDate(1, b.getReturnDate() != null ? Date.valueOf(b.getReturnDate()) : null);
             ps.setString(2, b.getStatus());
             ps.setInt(3, b.getId());
             ps.executeUpdate();
@@ -98,7 +98,7 @@ public class BorrowingDAOImpl implements BorrowingDAO {
         String sql = "SELECT * FROM borrowing WHERE status = 'BORROWED' AND due_date < ?";
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, LocalDate.now().toString());
+            ps.setDate(1, Date.valueOf(LocalDate.now()));
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) results.add(mapRow(rs));
             }
@@ -107,14 +107,14 @@ public class BorrowingDAOImpl implements BorrowingDAO {
     }
 
     private Borrowing mapRow(ResultSet rs) throws SQLException {
-        String returnDateStr = rs.getString("return_date");
+        Date returnDate = rs.getDate("return_date");
         return new Borrowing(
                 rs.getInt("borrowing_id"),
                 rs.getInt("borrowing_user_id"),
                 rs.getInt("borrowing_book_id"),
-                LocalDate.parse(rs.getString("borrow_date")),
-                LocalDate.parse(rs.getString("due_date")),
-                (returnDateStr == null || returnDateStr.isEmpty()) ? null : LocalDate.parse(returnDateStr),
+                rs.getDate("borrow_date").toLocalDate(),
+                rs.getDate("due_date").toLocalDate(),
+                returnDate != null ? returnDate.toLocalDate() : null,
                 rs.getString("status")
         );
     }
