@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class AuthorsPanel {
 
-    public static JPanel BorrowingsPanel(MainWindow mainWindow) {
+    public static JPanel AuthorsPanel(MainWindow mainWindow) {
 
         // =========================
         // MAIN PANEL

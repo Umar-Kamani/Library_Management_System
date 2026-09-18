@@ -1,8 +1,6 @@
 package mu.alche.library.App;
 
-import mu.alche.library.UI.BooksPanel;
-import mu.alche.library.UI.BorrowingsPanel;
-import mu.alche.library.UI.UIComponents;
+import mu.alche.library.UI.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -80,6 +78,10 @@ public class MainWindow {
         // Books button
         btn1.addActionListener(e -> showBooksPanel());
         btn2.addActionListener(e -> showBorrowingsPanel());
+        btn3.addActionListener(e -> showGenresPanel());
+        btn4.addActionListener(e -> showLocationsPanel());
+        btn5.addActionListener(e -> showAuthorsPanel());
+        btn6.addActionListener(e -> showUsersPanel());
 
 
         // Add Home to main panel
@@ -120,6 +122,65 @@ public class MainWindow {
         refreshPanel();
     }
 
+    // =========================
+    // Genres PANEL
+    // =========================
+    private void showGenresPanel() {
+
+        panel.removeAll();
+
+        panel.add(
+                GenresPanel.GenresPanel(this),
+                BorderLayout.CENTER
+        );
+
+        refreshPanel();
+    }
+
+    // =========================
+    // Locations PANEL
+    // =========================
+    private void showLocationsPanel() {
+
+        panel.removeAll();
+
+        panel.add(
+                LocationsPanel.LocationPanel(this),
+                BorderLayout.CENTER
+        );
+
+        refreshPanel();
+    }
+
+    // =========================
+    // Authors PANEL
+    // =========================
+    private void showAuthorsPanel() {
+
+        panel.removeAll();
+
+        panel.add(
+                AuthorsPanel.AuthorsPanel(this),
+                BorderLayout.CENTER
+        );
+
+        refreshPanel();
+    }
+
+    // =========================
+    // Users PANEL
+    // =========================
+    private void showUsersPanel() {
+
+        panel.removeAll();
+
+        panel.add(
+                UsersPanel.UsersPanel(this),
+                BorderLayout.CENTER
+        );
+
+        refreshPanel();
+    }
 
     // =========================
     // REFRESH GUI
