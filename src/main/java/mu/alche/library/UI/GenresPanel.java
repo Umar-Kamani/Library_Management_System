@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class GenresPanel {
 
-    public static JPanel BorrowingsPanel(MainWindow mainWindow) {
+    public static JPanel GenresPanel(MainWindow mainWindow) {
 
         // =========================
         // MAIN PANEL
