@@ -72,6 +72,17 @@ public class BorrowingService {
         return borrowingDAO.findOverdue();
     }
 
+        public List<Borrowing> getAllBorrowings() throws SQLException {
+        return borrowingDAO.getAll();
+    }
+
+    public void deleteBorrowing(int borrowingId) throws SQLException {
+        Borrowing borrowing = borrowingDAO.get(borrowingId);
+        if (borrowing != null) {
+            borrowingDAO.delete(borrowing);
+        }
+    }
+    
     private long countActiveBorrowingsForUser(int userId) throws SQLException {
         return borrowingDAO.findByUser(userId).stream()
                 .filter(b -> b.getReturnDate() == null)
