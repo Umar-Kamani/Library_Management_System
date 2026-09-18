@@ -1,6 +1,7 @@
 package mu.alche.library.App;
 
 import mu.alche.library.UI.BooksPanel;
+import mu.alche.library.UI.BorrowingsPanel;
 import mu.alche.library.UI.UIComponents;
 
 import javax.swing.*;
@@ -78,6 +79,8 @@ public class MainWindow {
 
         // Books button
         btn1.addActionListener(e -> showBooksPanel());
+        btn2.addActionListener(e -> showBorrowingsPanel());
+
 
         // Add Home to main panel
         panel.add(headerPanel, BorderLayout.NORTH);
@@ -96,6 +99,21 @@ public class MainWindow {
 
         panel.add(
                 BooksPanel.BooksPanel(this),
+                BorderLayout.CENTER
+        );
+
+        refreshPanel();
+    }
+
+    // =========================
+    // BORROWINGS PANEL
+    // =========================
+    private void showBorrowingsPanel() {
+
+        panel.removeAll();
+
+        panel.add(
+                BorrowingsPanel.BorrowingsPanel(this),
                 BorderLayout.CENTER
         );
 
