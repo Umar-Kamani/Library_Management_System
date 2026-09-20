@@ -169,4 +169,22 @@ public class UserService {
                     "Phone number must contain between 7 and 15 digits"
             );
         }
+        String email = user.getEmail();
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("User email cannot be empty");
+        }
+
+        email = email.strip();
+
+        if (email.length() > MAX_TEXT_LENGTH || !EMAIL_PATTERN.matcher(email).matches()) {
+            throw new IllegalArgumentException("User email is not a valid email address");
+        }
+
+        user.setName(name);
+        user.setPhone(phone);
+        user.setEmail(email);
+    }
+
+
 }
