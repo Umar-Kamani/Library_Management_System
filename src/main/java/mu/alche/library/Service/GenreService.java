@@ -79,9 +79,6 @@ public class GenreService {
         }
 
         String name = validateName(genre.getName());
-
-        // Only look for duplicates when the name really changes.
-        // Changing only the capitalisation ("fiction" -> "Fiction") is allowed.
         if (!name.equalsIgnoreCase(existingGenre.getName())) {
 
             Genre sameName = genreDAO.findByName(name);
@@ -112,8 +109,7 @@ public class GenreService {
         try {
             genreDAO.delete(genre);
         } catch (SQLIntegrityConstraintViolationException e) {
-            // book.book_genre_id has a foreign key to genre.genre_id,
-            // so MySQL refuses to delete a genre that books still use.
+            // book.book_genre_id has a foreign key to genre.genre_id,so MySQL refuses to delete a genre that books still use.
             throw new IllegalStateException(
                     "Cannot delete genre \"" + genre.getName() +
                             "\" because one or more books are assigned to it",
