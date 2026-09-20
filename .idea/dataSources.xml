@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="alche_library@localhost" uuid="9cd29a86-b13d-4586-a7df-28053fea3e7f">
+    <data-source source="LOCAL" name="library@localhost" uuid="65fcd17f-d6f2-4463-b914-c849fb1efa3d">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

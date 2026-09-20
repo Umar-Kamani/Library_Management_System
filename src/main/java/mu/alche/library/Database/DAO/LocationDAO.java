@@ -5,5 +5,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface LocationDAO extends DAO<Location> {
-    List<Location> findChildren() throws SQLException;
+    List<Location> findChildren(int parentId) throws SQLException;
 }

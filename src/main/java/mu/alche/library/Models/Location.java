@@ -5,13 +5,21 @@ public class Location {
         //this is the  unique Book id
         private int id;
 
-        // the actual location name, e.g. "Shelf A2" or "Floor 1 - Reference Section"
+        // the actual location name"
         private String name;
 
+        // The type of the location
+        private String type;
+
+        //The parent id of the location
+        private int parentLocationId;
+
         // constructor, fills both fields when a Location object is created
-        public Location(int id, String name) {
+        public Location(int id, String name, String type, int parentLocationId) {
             this.id = id;
             this.name = name;
+            this.type = type;
+            this.parentLocationId = parentLocationId;
         }
 
 
@@ -20,6 +28,12 @@ public class Location {
 
         public String getName() {return name;}
         public void setName(String name) {this.name = name;}
+
+        public String getType() {return type;}
+        public void setType(String type) {this.type = type;}
+
+        public Integer getParentLocationId() {return parentLocationId;}
+        public void setParentLocationId(Integer parentLocationId) {this.parentLocationId = parentLocationId;}
     }
 
 
