@@ -148,4 +148,25 @@ public class UserService {
                     "User name cannot be longer than " + MAX_TEXT_LENGTH + " characters"
             );
         }
+        String phone = user.getPhone();
+
+        if (phone == null || phone.isBlank()) {
+            throw new IllegalArgumentException("User phone cannot be empty");
+        }
+
+        phone = phone.strip();
+
+        if (!PHONE_PATTERN.matcher(phone).matches()) {
+            throw new IllegalArgumentException(
+                    "Phone number can only contain digits, spaces, dashes, brackets and a leading +"
+            );
+        }
+
+        long digitCount = phone.chars().filter(Character::isDigit).count();
+
+        if (digitCount < 7 || digitCount > 15) {
+            throw new IllegalArgumentException(
+                    "Phone number must contain between 7 and 15 digits"
+            );
+        }
 }
