@@ -211,6 +211,4 @@ public class UserService {
                 .filter(b -> b.getReturnDate() == null)
                 .count();
     }
-    }
-
 }
