@@ -38,10 +38,11 @@ public class DBUtils {
                 // Location table
                 "CREATE TABLE IF NOT EXISTS location (" +
                         "location_id INT AUTO_INCREMENT PRIMARY KEY, " +
-                        "location_name VARCHAR(255) NOT NULL" +
-                        "parent_location_id INT NOT NULL" +
-                        "constraint location_ibfk_1 foreign key(parent_location_id) references location(location_id)"+
-                        ")",
+                        "location_name VARCHAR(255) NOT NULL, " +
+                        "location_type VARCHAR(255) NOT NULL, " +
+                        "parent_location_id INT NOT NULL, " +
+                        "CONSTRAINT location_ibfk_1 FOREIGN KEY(parent_location_id) REFERENCES location(location_id)" +
+                        ")", 
 
                 // User table
                 "CREATE TABLE IF NOT EXISTS user (" +
