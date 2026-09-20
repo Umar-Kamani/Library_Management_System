@@ -1,4 +1,14 @@
 package mu.alche.library.Service;
+import mu.alche.library.Database.DAO.BorrowingDAO;
+import mu.alche.library.Database.DAO.UserDAO;
+import mu.alche.library.Models.Borrowing;
+import mu.alche.library.Models.Faculty;
+import mu.alche.library.Models.Student;
+import mu.alche.library.Models.User;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class UserService {
 
@@ -185,6 +195,22 @@ public class UserService {
         user.setPhone(phone);
         user.setEmail(email);
     }
+    private boolean isEmailInUse(String email, int ignoreUserId) throws SQLException {
 
+        for (User existing : userDAO.getAll()) {
+            if (existing.getId() != ignoreUserId && email.equalsIgnoreCase(existing.getEmail())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private long countActiveBorrowings(int userId) throws SQLException {
+        return borrowingDAO.findByUser(userId).stream()
+                .filter(b -> b.getReturnDate() == null)
+                .count();
+    }
+    }
 
 }
