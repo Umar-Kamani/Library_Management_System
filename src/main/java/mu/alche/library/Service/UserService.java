@@ -43,5 +43,21 @@ public class UserService {
 
         return user;
     }
-    
+    public List<User> getAllUsers() throws SQLException {
+        return userDAO.getAll();
+    }
+
+    public void updateUser(User user) throws SQLException {
+
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        User existingUser = userDAO.get(user.getId());
+
+        if (existingUser == null) {
+            throw new IllegalArgumentException(
+                    "No user found with id " + user.getId()
+            );
+        }
 }
