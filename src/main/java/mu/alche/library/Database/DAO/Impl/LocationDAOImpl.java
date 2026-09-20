@@ -79,6 +79,7 @@ public class LocationDAOImpl implements LocationDAO {
             ps.setString(1, location.getName());
             ps.setInt(2, location.getParentLocationId());
             ps.setString(3, location.getType());
+            ps.setInt(4, location.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update location", e);
@@ -109,7 +110,7 @@ public class LocationDAOImpl implements LocationDAO {
         try(Connection connection = DBUtils.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setString(1, "%" + id + "%");
+            ps.setInt(1, id);
 
             try(ResultSet rs = ps.executeQuery()) {
 

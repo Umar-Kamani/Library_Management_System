@@ -155,8 +155,7 @@ public class BookDAOImpl implements BookDAO {
         String sql = """
             SELECT b.*
             FROM book b
-            JOIN location g ON b.book_location_id = g.location_id
-            WHERE g.location_name LIKE ?
+            WHERE b.book_location_id = ?
             """;
 
 
@@ -164,7 +163,7 @@ public class BookDAOImpl implements BookDAO {
         try(Connection connection = DBUtils.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql))
         {
-            ps.setString(1, "%" + locationId + "%");
+            ps.setInt(1, locationId);
 
             try(ResultSet rs = ps.executeQuery()) {
 

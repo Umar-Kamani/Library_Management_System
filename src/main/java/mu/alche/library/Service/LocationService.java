@@ -1,17 +1,31 @@
 package mu.alche.library.Service;
 
+import mu.alche.library.Database.DAO.BookDAO;
 import mu.alche.library.Database.DAO.LocationDAO;
+import mu.alche.library.Models.Book;
 import mu.alche.library.Models.Location;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LocationService {
 
     private final LocationDAO locationDAO;
 
+    // Only needed by getAllBooksUnder. Stays null when the service is
+    // built for location work alone.
+    private final BookDAO bookDAO;
+
     public LocationService(LocationDAO locationDAO) {
+        this(locationDAO, null);
+    }
+
+    public LocationService(LocationDAO locationDAO, BookDAO bookDAO) {
         this.locationDAO = locationDAO;
+        this.bookDAO = bookDAO;
     }
 
     // =========================

@@ -79,9 +79,7 @@ public class UserService {
             );
         }
 
-        // Changing the role (Student <-> Faculty) changes the borrowing limit,
-        // so make sure the user doesn't already hold more books than the new limit.
-        if (!existingUser.getRole().equals(user.getRole())) {
+                if (!existingUser.getRole().equals(user.getRole())) {
 
             long activeBorrowings = countActiveBorrowings(user.getId());
 
@@ -141,7 +139,7 @@ public class UserService {
 
         if (!(user instanceof Student) && !(user instanceof Faculty)) {
             throw new IllegalArgumentException(
-                    "User must be either a Student or a Faculty member"
+                    "User must be either an ALCHE Student or a Faculty member"
             );
         }
 
@@ -211,6 +209,5 @@ public class UserService {
                 .filter(b -> b.getReturnDate() == null)
                 .count();
     }
-    }
-
 }
+
