@@ -135,7 +135,37 @@ public class LocationDAOImpl implements LocationDAO {
 
     @Override
     public List<Location> getAll() throws SQLException {
-        return List.of();
+        String sql = "SELECT * FROM location";
+
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+
+            List<Location> location;
+            try (ResultSet rs = ps.executeQuery()) {
+
+                location = new ArrayList<>();
+
+                while (rs.next()) {
+
+                    int locationid = rs.getInt("location_id");
+                    String locationname = rs.getString("location_name");
+                    int parentlocationid = rs.getInt("parent_location_id");
+                    String locationtype = rs.getString("location_type");
+
+                    Location location1 = new Location(
+                            locationid,
+                            locationname,
+                            locationtype,
+                            parentlocationid
+                    );
+
+                    location.add(location1);
+                }
+            }
+
+            return location;
+        }
     }
 
 }
