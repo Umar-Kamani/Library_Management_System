@@ -60,4 +60,92 @@ public class UserService {
                     "No user found with id " + user.getId()
             );
         }
+
+        validateAndNormalise(user);
+
+        if (isEmailInUse(user.getEmail(), user.getId())) {
+            throw new IllegalArgumentException(
+                    "A user with email " + user.getEmail() + " already exists"
+            );
+        }
+
+        // Changing the role (Student <-> Faculty) changes the borrowing limit,
+        // so make sure the user doesn't already hold more books than the new limit.
+        if (!existingUser.getRole().equals(user.getRole())) {
+
+            long activeBorrowings = countActiveBorrowings(user.getId());
+
+            if (activeBorrowings > user.getMaxBooks()) {
+                throw new IllegalStateException(
+                        "Cannot change user " + user.getId() + " to " + user.getRole() +
+                                ": they currently have " + activeBorrowings +
+                                " book(s) borrowed but a " + user.getRole() +
+                                " can only borrow " + user.getMaxBooks()
+                );
+            }
+        }
+
+        userDAO.update(user);
+    }
+
+    public void deleteUser(int id) throws SQLException {
+
+        User user = userDAO.get(id);
+
+        if (user == null) {
+            throw new IllegalArgumentException(
+                    "No user found with id " + id
+            );
+        }
+        List<Borrowing> borrowings = borrowingDAO.findByUser(id);
+
+        long activeBorrowings = borrowings.stream()
+                .filter(b -> b.getReturnDate() == null)
+                .count();
+
+        if (activeBorrowings > 0) {
+            throw new IllegalStateException(
+                    "Cannot delete user " + id + " because they still have " +
+                            activeBorrowings + " book(s) borrowed"
+            );
+        }
+
+        // borrowing.borrowing_user_id has a foreign key to user.user_id,
+        // so a user with returned borrowings can't be deleted either.
+        if (!borrowings.isEmpty()) {
+            throw new IllegalStateException(
+                    "Cannot delete user " + id +
+                            " because they have a borrowing history"
+            );
+        }
+
+        userDAO.delete(user);
+    }
+
+    // Checks every field and trims the text values on the user object
+    private void validateAndNormalise(User user) {
+
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        if (!(user instanceof Student) && !(user instanceof Faculty)) {
+            throw new IllegalArgumentException(
+                    "User must be either a Student or a Faculty member"
+            );
+        }
+
+        String name = user.getName();
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("User name cannot be empty");
+        }
+
+        name = name.strip();
+
+        if (name.length() > MAX_TEXT_LENGTH) {
+            throw new IllegalArgumentException(
+                    "User name cannot be longer than " + MAX_TEXT_LENGTH + " characters"
+            );
+        }
 }
