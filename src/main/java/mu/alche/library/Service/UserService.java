@@ -31,5 +31,17 @@ public class UserService {
 
         return userDAO.create(user);
     }
+    public User getUser(int id) throws SQLException {
 
+        User user = userDAO.get(id);
+
+        if (user == null) {
+            throw new IllegalArgumentException(
+                    "No user found with id " + id
+            );
+        }
+
+        return user;
+    }
+    
 }

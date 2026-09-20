@@ -142,7 +142,7 @@ public class MainWindow {
         panel.removeAll();
 
         panel.add(
-                LocationsPanel.LocationPanel(this),
+                LocationsPanel.LocationsPanel(this),
                 BorderLayout.CENTER
         );
 

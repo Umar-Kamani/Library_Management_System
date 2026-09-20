@@ -36,14 +36,12 @@ public class BooksPanel {
         headerPanel.setBackground(Color.decode("#273c75"));
         headerPanel.setPreferredSize(new Dimension(0, 90));
 
-
         JButton homeButton =
-                UIComponents.createButton("Home","#ffffff","#192a56");
+                UIComponents.createButton("Home", "#ffffff", "#192a56");
 
         homeButton.addActionListener(e ->
                 mainWindow.showHomePanel()
         );
-
 
         JLabel title = new JLabel("Books");
 
@@ -56,8 +54,6 @@ public class BooksPanel {
         title.setFont(
                 new Font("Arial", Font.BOLD, 36)
         );
-
-
 
         headerPanel.add(
                 title,
@@ -84,7 +80,6 @@ public class BooksPanel {
                 )
         );
 
-
         JButton newButton =
                 UIComponents.createButton(
                         "New",
@@ -105,7 +100,6 @@ public class BooksPanel {
                         "#ffffff",
                         "#192a56"
                 );
-
 
         buttonPanel.add(newButton);
         buttonPanel.add(editButton);
@@ -134,6 +128,83 @@ public class BooksPanel {
 
 
         // =========================
+        // SEARCH
+        // =========================
+
+        JPanel searchPanel =
+                new JPanel(new BorderLayout(10, 10));
+
+        searchPanel.setBackground(Color.WHITE);
+
+        JComboBox<String> searchType =
+                new JComboBox<>(
+                        new String[]{
+                                "Title",
+                                "Author",
+                                "ISBN"
+                        }
+                );
+
+        JTextField searchField =
+                new JTextField();
+
+        JButton searchButton =
+                UIComponents.createButton(
+                        "Search",
+                        "#ffffff",
+                        "#192a56"
+                );
+
+        JButton clearButton =
+                UIComponents.createButton(
+                        "Clear",
+                        "#ffffff",
+                        "#192a56"
+                );
+
+        JPanel searchInputPanel =
+                new JPanel(new BorderLayout(10, 10));
+
+        searchInputPanel.setBackground(Color.WHITE);
+
+        searchInputPanel.add(
+                searchType,
+                BorderLayout.WEST
+        );
+
+        searchInputPanel.add(
+                searchField,
+                BorderLayout.CENTER
+        );
+
+        JPanel searchButtonPanel =
+                new JPanel(
+                        new GridLayout(1, 2, 10, 0)
+                );
+
+        searchButtonPanel.setBackground(Color.WHITE);
+
+        searchButtonPanel.add(searchButton);
+        searchButtonPanel.add(clearButton);
+
+        searchPanel.add(
+                searchInputPanel,
+                BorderLayout.CENTER
+        );
+
+        searchPanel.add(
+                searchButtonPanel,
+                BorderLayout.EAST
+        );
+
+        searchPanel.setBorder(
+                new EmptyBorder(
+                        0, 0, 15, 0
+                )
+        );
+
+
+        // =========================
         // BOOK TABLE
         // =========================
 
@@ -148,7 +219,6 @@ public class BooksPanel {
                 "Available Copies"
         };
 
-
         DefaultTableModel tableModel =
                 new DefaultTableModel(columns, 0) {
 
@@ -160,7 +230,6 @@ public class BooksPanel {
                         return false;
                     }
                 };
-
 
         JTable bookTable =
                 new JTable(tableModel);
@@ -179,10 +248,18 @@ public class BooksPanel {
                 ListSelectionModel.SINGLE_SELECTION
         );
 
-
         JScrollPane scrollPane =
                 new JScrollPane(bookTable);
 
+
+        // =========================
+        // ADD SEARCH + TABLE
+        // =========================
+
+        contentPanel.add(
+                searchPanel,
+                BorderLayout.NORTH
+        );
 
         contentPanel.add(
                 scrollPane,
@@ -214,7 +291,7 @@ public class BooksPanel {
         // DATA LOADING
         // =========================
 
-        Runnable reload = () -> {
+        Runnable loadBooks = () -> {
 
             tableModel.setRowCount(0);
 
@@ -222,6 +299,84 @@ public class BooksPanel {
 
                 List<Book> books =
                         bookService.getAllBooks();
+
+                for (Book book : books) {
+
+                    tableModel.addRow(
+                            new Object[]{
+                                    book.getId(),
+                                    book.getTitle(),
+                                    book.getAuthor(),
+                                    book.getIsbn(),
+                                    book.getGenreId(),
+                                    book.getLocationId(),
+                                    book.getTotalCopies(),
+                                    book.getAvailableCopies()
+                            }
+                    );
+                }
+
+            } catch (SQLException ex) {
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        "Could not load books: "
+                                + ex.getMessage(),
+                        "Database Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        };
+
+
+        // =========================
+        // SEARCH DATA
+        // =========================
+
+        Runnable searchBooks = () -> {
+
+            String searchText =
+                    searchField.getText().trim();
+
+            if (searchText.isEmpty()) {
+
+                loadBooks.run();
+
+                return;
+            }
+
+            try {
+
+                List<Book> books;
+
+                String selectedType =
+                        searchType.getSelectedItem().toString();
+
+
+                if (selectedType.equals("Title")) {
+
+                    books =
+                            bookService.findBooksByTitle(
+                                    searchText
+                            );
+
+                } else if (selectedType.equals("Author")) {
+
+                    books =
+                            bookService.findBooksByAuthor(
+                                    searchText
+                            );
+
+                } else {
+
+                    books =
+                            bookService.findBooksByIsbn(
+                                    searchText
+                            );
+                }
+
+
+                tableModel.setRowCount(0);
 
 
                 for (Book book : books) {
@@ -241,11 +396,22 @@ public class BooksPanel {
                 }
 
 
+                if (books.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(
+                            mainPanel,
+                            "No books found.",
+                            "Search",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+
+
             } catch (SQLException ex) {
 
                 JOptionPane.showMessageDialog(
                         mainPanel,
-                        "Could not load books: "
+                        "Search failed: "
                                 + ex.getMessage(),
                         "Database Error",
                         JOptionPane.ERROR_MESSAGE
@@ -254,7 +420,40 @@ public class BooksPanel {
         };
 
 
-        reload.run();
+        // Load books when panel opens
+        loadBooks.run();
+
+
+        // =========================
+        // SEARCH BUTTON
+        // =========================
+
+        searchButton.addActionListener(e ->
+                searchBooks.run()
+        );
+
+
+        // =========================
+        // ENTER TO SEARCH
+        // =========================
+
+        searchField.addActionListener(e ->
+                searchBooks.run()
+        );
+
+
+        // =========================
+        // CLEAR SEARCH
+        // =========================
+
+        clearButton.addActionListener(e -> {
+
+            searchField.setText("");
+
+            searchType.setSelectedIndex(0);
+
+            loadBooks.run();
+        });
 
 
         // =========================
@@ -413,7 +612,7 @@ public class BooksPanel {
                 );
 
 
-                reload.run();
+                loadBooks.run();
 
 
             } catch (NumberFormatException ex) {
@@ -650,7 +849,7 @@ public class BooksPanel {
                 );
 
 
-                reload.run();
+                loadBooks.run();
 
 
             } catch (NumberFormatException ex) {
@@ -755,7 +954,7 @@ public class BooksPanel {
                 );
 
 
-                reload.run();
+                loadBooks.run();
 
 
             } catch (
