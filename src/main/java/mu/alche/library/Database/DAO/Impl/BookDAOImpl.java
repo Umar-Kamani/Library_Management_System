@@ -103,8 +103,7 @@ public class BookDAOImpl implements BookDAO {
     public List<Book> findByGenre(String  genre) throws SQLException {
 
         String sql = """
-            
-                SELECT b.*
+            SELECT b.*
             FROM book b
             JOIN genre g ON b.book_genre_id = g.genre_id
             WHERE g.genre_name LIKE ?
