@@ -4,6 +4,7 @@ import mu.alche.library.Database.DAO.LocationDAO;
 import mu.alche.library.Models.Location;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocationService {
@@ -197,5 +198,39 @@ public class LocationService {
                     "Parent location ID cannot be negative"
             );
         }
+    }
+        
+    // =========================
+    // RECURSIVE TRAVERSAL
+    // =========================
+
+    public List<Location> getAllDescendants(int locationId) throws SQLException {
+        List<Location> descendants = new ArrayList<>();
+        List<Location> children = locationDAO.findChildren(locationId);
+
+        for (Location child : children) {
+            descendants.add(child);
+            descendants.addAll(getAllDescendants(child.getId())); // recursive call
+        }
+
+        return descendants;
+    }
+
+    public int countAllDescendants(int locationId) throws SQLException {
+        return getAllDescendants(locationId).size();
+    }
+
+    public String getFullPath(int locationId) throws SQLException {
+        Location location = locationDAO.get(locationId);
+
+        if (location == null) {
+            throw new IllegalArgumentException("No location found with id " + locationId);
+        }
+
+        if (location.getParentLocationId() == null || location.getParentLocationId() <= 0) {
+            return location.getName(); // base case: reached the root
+        }
+
+        return getFullPath(location.getParentLocationId()) + " > " + location.getName(); // recursive call
     }
 }
