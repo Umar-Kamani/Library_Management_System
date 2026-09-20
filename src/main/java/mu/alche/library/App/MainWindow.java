@@ -44,8 +44,7 @@ public class MainWindow {
         JButton btn2 = UIComponents.createButton("Borrowings", "#192a56", "#ffffff");
         JButton btn3 = UIComponents.createButton("Genres", "#192a56", "#ffffff");
         JButton btn4 = UIComponents.createButton("Locations", "#192a56", "#ffffff");
-        JButton btn5 = UIComponents.createButton("Authors", "#192a56", "#ffffff");
-        JButton btn6 = UIComponents.createButton("Users", "#192a56", "#ffffff");
+        JButton btn5 = UIComponents.createButton("Users", "#192a56", "#ffffff");
 
         // Add buttons
         homebtnPanel.add(btn1);
@@ -53,7 +52,6 @@ public class MainWindow {
         homebtnPanel.add(btn3);
         homebtnPanel.add(btn4);
         homebtnPanel.add(btn5);
-        homebtnPanel.add(btn6);
 
         homebtnPanel.setPreferredSize(new Dimension(600, 400));
 
@@ -80,8 +78,7 @@ public class MainWindow {
         btn2.addActionListener(e -> showBorrowingsPanel());
         btn3.addActionListener(e -> showGenresPanel());
         btn4.addActionListener(e -> showLocationsPanel());
-        btn5.addActionListener(e -> showAuthorsPanel());
-        btn6.addActionListener(e -> showUsersPanel());
+        btn5.addActionListener(e -> showUsersPanel());
 
 
         // Add Home to main panel
@@ -146,21 +143,6 @@ public class MainWindow {
 
         panel.add(
                 LocationsPanel.LocationPanel(this),
-                BorderLayout.CENTER
-        );
-
-        refreshPanel();
-    }
-
-    // =========================
-    // Authors PANEL
-    // =========================
-    private void showAuthorsPanel() {
-
-        panel.removeAll();
-
-        panel.add(
-                AuthorsPanel.AuthorsPanel(this),
                 BorderLayout.CENTER
         );
 
