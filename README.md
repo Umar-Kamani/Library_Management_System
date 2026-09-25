@@ -47,13 +47,7 @@ under `target/`.
 
 ## Running the application
 
-After building:
-
-```bash
-mvn exec:java -Dexec.mainClass="mu.alche.library.App.Launcher"
-```
-
-Or, after packaging (see below), run the produced JAR directly:
+After packaging (see below), run the produced JAR directly:
 
 ```bash
 java -jar target/Library_Management_System-1.0-SNAPSHOT.jar
@@ -90,8 +84,7 @@ runtime, so it runs on a machine without Java installed.
    a native launcher — this folder can be copied to and run on any machine
    of the same OS, with no Java installation required.
 
-**Verified on:** _[fill in: e.g. "Windows 11, built and tested on a machine
-with no separate Java install"]_
+**Verified on:** Windows 11 Pro, version 25H2 (OS Build 26200.8875). Packaged app-image launches correctly; not yet tested on a machine without a separate Java installation.
 
 ## Project structure
 ```
@@ -106,3 +99,13 @@ src/main/java/mu/alche/library/
 
 src/test/java/ # Mirrors the structure above; JUnit 5 test suite
 ```
+## Team
+
+Umar
+My main contribution to the project was the implementation of the Database layer which includes the connection, schema creation, DAO and DAO Implementation where I developed the Book, Location and User DAO’s and their corresponding implementations. I also implemented the Book, Faculty, Location, Student and User models along with bookService and LocationService. Moreover, I also worked with my teammates to develop the Swing UI interface.
+
+Sherif
+I helped write the initial project proposal before we started coding, and in the early stages of the project, I built the first version of the book and location logic as BookManager and LocationManager, along with the Location model itself, before the team moved the codebase over to the DAO and Service pattern we use now. Once we made that move, my main contribution became GenreService and UserService, which sit between the Swing panels and the DAO layer.I also fixed some errors in the LocationService and mainWindow JFrame file. I did a few unit tests on my laptop with fake inputs to ensure the program was running smoothly. Lastly, I worked with my team members on working with this final project brief.
+
+Nelly
+I implemented the Borrowing and Genre entities end-to-end: the Genre/Borrowing models, their DAO interfaces and implementations, and BorrowingService, which enforces the borrowing-limit and book-availability rules and calculates due dates based on user role. I also wrote the JUnit test suite for the service layer using hand-written fake DAOs rather than a live database connection, wired the Genres and Borrowings screens to real data, and wrote the project README.
