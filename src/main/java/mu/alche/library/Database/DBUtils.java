@@ -23,12 +23,6 @@ public class DBUtils {
                 // Select database
                 "USE alche_library",
 
-                // Create database user
-                "CREATE USER IF NOT EXISTS 'library_manager'@'localhost' IDENTIFIED BY 'password1234'",
-
-                // Give the user permissions
-                "GRANT ALL PRIVILEGES ON alche_library.* TO 'library_manager'@'localhost'",
-
                 // Genre table
                 "CREATE TABLE IF NOT EXISTS genre (" +
                         "genre_id INT AUTO_INCREMENT PRIMARY KEY, " +
