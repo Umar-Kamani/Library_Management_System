@@ -127,10 +127,34 @@ public class LocationsPanel {
                         "#192a56"
                 );
 
+        JButton fullPathButton =
+                UIComponents.createButton(
+                        "Full Path",
+                        "#ffffff",
+                        "#192a56"
+                );
+
+        JButton childrenButton =
+                UIComponents.createButton(
+                        "Children",
+                        "#ffffff",
+                        "#192a56"
+                );
+
+        JButton descendantsButton =
+                UIComponents.createButton(
+                        "Descendants",
+                        "#ffffff",
+                        "#192a56"
+                );
+
 
         buttonPanel.add(newButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(fullPathButton);
+        buttonPanel.add(childrenButton);
+        buttonPanel.add(descendantsButton);
         buttonPanel.add(homeButton);
 
 
@@ -743,6 +767,194 @@ public class LocationsPanel {
                         mainPanel,
                         "Database error: "
                                 + ex.getMessage(),
+                        "Database Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+
+
+        // =========================
+        // FULL PATH BUTTON
+        // =========================
+
+
+        fullPathButton.addActionListener(e -> {
+
+            int row = locationTable.getSelectedRow();
+
+            if (row == -1) {
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        "Select a location first.",
+                        "No Selection",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            int id = (int) tableModel.getValueAt(row, 0);
+
+            try {
+
+                String path = locationService.getFullPath(id);
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        path,
+                        "Full Path",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+            } catch (IllegalArgumentException ex) {
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        ex.getMessage(),
+                        "Error",
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+            } catch (SQLException ex) {
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        "Database error: " + ex.getMessage(),
+                        "Database Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+
+
+        // =========================
+        // CHILDREN BUTTON
+        // =========================
+
+        childrenButton.addActionListener(e -> {
+
+            int row = locationTable.getSelectedRow();
+
+            if (row == -1) {
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        "Select a location first.",
+                        "No Selection",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            int id = (int) tableModel.getValueAt(row, 0);
+
+            try {
+
+                List<Location> children = locationService.getChildren(id);
+
+                if (children.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(
+                            mainPanel,
+                            "This location has no immediate children.",
+                            "Children",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+
+                    return;
+                }
+
+                StringBuilder sb = new StringBuilder();
+
+                for (Location child : children) {
+                    sb.append(child.getName())
+                            .append(" (id ")
+                            .append(child.getId())
+                            .append(")\n");
+                }
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        sb.toString(),
+                        "Immediate Children",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+            } catch (SQLException ex) {
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        "Database error: " + ex.getMessage(),
+                        "Database Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+
+
+        // =========================
+        // DESCENDANTS BUTTON
+        // =========================
+
+
+        descendantsButton.addActionListener(e -> {
+
+            int row = locationTable.getSelectedRow();
+
+            if (row == -1) {
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        "Select a location first.",
+                        "No Selection",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            int id = (int) tableModel.getValueAt(row, 0);
+
+            try {
+
+                int count = locationService.countAllDescendants(id);
+                List<Location> descendants = locationService.getAllDescendants(id);
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("Total descendants: ").append(count).append("\n\n");
+
+                for (Location descendant : descendants) {
+                    sb.append(descendant.getName())
+                            .append(" (id ")
+                            .append(descendant.getId())
+                            .append(")\n");
+                }
+
+                JTextArea textArea = new JTextArea(sb.toString());
+                textArea.setEditable(false);
+                textArea.setFont(new Font("Arial", Font.PLAIN, 13));
+
+                JScrollPane scroll = new JScrollPane(textArea);
+                scroll.setPreferredSize(new Dimension(320, 220));
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        scroll,
+                        "All Descendants (recursive)",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+            } catch (IllegalArgumentException ex) {
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        ex.getMessage(),
+                        "Error",
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+            } catch (SQLException ex) {
+
+                JOptionPane.showMessageDialog(
+                        mainPanel,
+                        "Database error: " + ex.getMessage(),
                         "Database Error",
                         JOptionPane.ERROR_MESSAGE
                 );
