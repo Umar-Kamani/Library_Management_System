@@ -61,10 +61,6 @@ public class DBUtils {
                         "FOREIGN KEY (book_location_id) REFERENCES location(location_id)" +
                         ")",
 
-                // Indexes for Book foreign keys
-                "CREATE INDEX book_genre_id ON book(book_genre_id)",
-
-                "CREATE INDEX book_location_id ON book(book_location_id)",
 
                 // Borrowing table
                 "CREATE TABLE IF NOT EXISTS borrowing (" +
@@ -78,11 +74,6 @@ public class DBUtils {
                         "FOREIGN KEY (borrowing_user_id) REFERENCES user(user_id), " +
                         "FOREIGN KEY (borrowing_book_id) REFERENCES book(book_id)" +
                         ")",
-
-                // Indexes for Borrowing foreign keys
-                "CREATE INDEX borrowing_book_id ON borrowing(borrowing_book_id)",
-
-                "CREATE INDEX borrowing_user_id ON borrowing(borrowing_user_id)"
         };
 
         try (Statement stmt = getConnection().createStatement()) {
