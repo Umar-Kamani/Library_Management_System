@@ -111,5 +111,8 @@ My main contribution to the project was the implementation of the Database layer
 Sherif
 I helped write the initial project proposal before we started coding, and in the early stages of the project, I built the first version of the book and location logic as BookManager and LocationManager, along with the Location model itself, before the team moved the codebase over to the DAO and Service pattern we use now. Once we made that move, my main contribution became GenreService and UserService, which sit between the Swing panels and the DAO layer.I also fixed some errors in the LocationService and mainWindow JFrame file. I did a few unit tests on my laptop with fake inputs to ensure the program was running smoothly. Lastly, I worked with my team members on working with this final project brief.
 
+## Report
+https://docs.google.com/document/d/1nUWLeD-2EarqDIB5H6ar4PyIhREzPWRspcPKDrPD0Pw/edit?usp=sharing
+
 Nelly
 I implemented the Borrowing and Genre entities end-to-end: the Genre/Borrowing models, their DAO interfaces and implementations, and BorrowingService, which enforces the borrowing-limit and book-availability rules and calculates due dates based on user role. I also wrote the JUnit test suite for the service layer using hand-written fake DAOs rather than a live database connection, wired the Genres and Borrowings screens to real data, and wrote the project README.
