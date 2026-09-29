@@ -318,7 +318,7 @@ public class BookDAOImpl implements BookDAO {
         try(Connection connection = DBUtils.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setString(1, "%" + id + "%");
+            ps.setInt(1, id);
 
             try(ResultSet rs = ps.executeQuery()) {
 
