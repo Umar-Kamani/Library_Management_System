@@ -1,83 +1,144 @@
 package mu.alche.library.Database.DAO.Impl;
 
-import mu.alche.library.Models.Genre;
+import mu.alche.library.Models.Borrowing;
+import mu.alche.library.Database.DBUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GenreDAOImplTest {
+@SuppressWarnings("SqlResolve") // tables exist in the live alche_library DB; IDE has no introspected schema
+class BorrowingDAOImplTest {
 
-    private final GenreDAOImpl genreDAO = new GenreDAOImpl();
-    private Genre testGenre;
+    private final BorrowingDAOImpl borrowingDAO = new BorrowingDAOImpl();
+
+    private static int testUserId;
+    private static int testBookId;
+
+    private Borrowing testBorrowing;
+
+    @BeforeAll
+    static void setUpUserAndBook() throws SQLException {
+        try (Connection conn = DBUtils.getConnection()) {
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO user (user_name, user_phone, user_email, user_role) VALUES (?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, "Test Borrower");
+                ps.setString(2, "0000000000");
+                ps.setString(3, "test.borrower@example.com");
+                ps.setString(4, "STUDENT");
+                ps.executeUpdate();
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) testUserId = keys.getInt(1);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO book (book_name, book_isbn, total_copies, available_copies, book_author) VALUES (?, ?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, "Test Book For Borrowing");
+                ps.setString(2, "0000000000000");
+                ps.setInt(3, 3);
+                ps.setInt(4, 3);
+                ps.setString(5, "Test Author");
+                ps.executeUpdate();
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) testBookId = keys.getInt(1);
+                }
+            }
+        }
+    }
+
+    @AfterAll
+    static void tearDownUserAndBook() throws SQLException {
+        try (Connection conn = DBUtils.getConnection()) {
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM book WHERE book_id = ?")) {
+                ps.setInt(1, testBookId);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM user WHERE user_id = ?")) {
+                ps.setInt(1, testUserId);
+                ps.executeUpdate();
+            }
+        }
+    }
 
     @AfterEach
-    void cleanUp() throws SQLException {
-        if (testGenre != null && testGenre.getId() != 0) {
-            genreDAO.delete(testGenre);
-            testGenre = null;
+    void cleanUpBorrowing() throws SQLException {
+        if (testBorrowing != null && testBorrowing.getId() != 0) {
+            borrowingDAO.delete(testBorrowing);
+            testBorrowing = null;
         }
+    }
+
+    private Borrowing newTestBorrowing(LocalDate dueDate) {
+        return new Borrowing(0, testUserId, testBookId, LocalDate.now(), dueDate, null, "BORROWED");
     }
 
     @Test
     void createAssignsGeneratedId() throws SQLException {
-        testGenre = genreDAO.create(new Genre(0, "Test Genre - Create"));
-        assertTrue(testGenre.getId() > 0, "create() should assign a generated id");
+        testBorrowing = borrowingDAO.create(newTestBorrowing(LocalDate.now().plusDays(14)));
+        assertTrue(testBorrowing.getId() > 0);
     }
 
     @Test
-    void getReturnsGenreById() throws SQLException {
-        testGenre = genreDAO.create(new Genre(0, "Test Genre - Get"));
-        Genre fetched = genreDAO.get(testGenre.getId());
+    void getReturnsCreatedBorrowing() throws SQLException {
+        testBorrowing = borrowingDAO.create(newTestBorrowing(LocalDate.now().plusDays(14)));
+        Borrowing fetched = borrowingDAO.get(testBorrowing.getId());
         assertNotNull(fetched);
-        assertEquals("Test Genre - Get", fetched.getName());
+        assertEquals(testUserId, fetched.getUserId());
+        assertEquals(testBookId, fetched.getBookId());
+        assertEquals("BORROWED", fetched.getStatus());
+        assertNull(fetched.getReturnDate());
     }
 
     @Test
-    void getReturnsNullForUnknownId() throws SQLException {
-        assertNull(genreDAO.get(-999999));
+    void updateSetsReturnDateAndStatus() throws SQLException {
+        testBorrowing = borrowingDAO.create(newTestBorrowing(LocalDate.now().plusDays(14)));
+
+        testBorrowing.setReturnDate(LocalDate.now());
+        testBorrowing.setStatus("RETURNED");
+        borrowingDAO.update(testBorrowing);
+
+        Borrowing fetched = borrowingDAO.get(testBorrowing.getId());
+        assertEquals("RETURNED", fetched.getStatus());
+        assertEquals(LocalDate.now(), fetched.getReturnDate());
     }
 
     @Test
-    void getAllIncludesCreatedGenre() throws SQLException {
-        testGenre = genreDAO.create(new Genre(0, "Test Genre - GetAll"));
-        List<Genre> all = genreDAO.getAll();
-        assertTrue(all.stream().anyMatch(g -> g.getId() == testGenre.getId()));
+    void findByUserIncludesCreatedBorrowing() throws SQLException {
+        testBorrowing = borrowingDAO.create(newTestBorrowing(LocalDate.now().plusDays(14)));
+        List<Borrowing> results = borrowingDAO.findByUser(testUserId);
+        assertTrue(results.stream().anyMatch(b -> b.getId() == testBorrowing.getId()));
     }
 
     @Test
-    void updateChangesName() throws SQLException {
-        testGenre = genreDAO.create(new Genre(0, "Test Genre - Before Update"));
-        testGenre.setName("Test Genre - After Update");
-        genreDAO.update(testGenre);
-
-        Genre fetched = genreDAO.get(testGenre.getId());
-        assertEquals("Test Genre - After Update", fetched.getName());
+    void findOverdueIncludesPastDueBorrowedBook() throws SQLException {
+        testBorrowing = borrowingDAO.create(newTestBorrowing(LocalDate.now().minusDays(1)));
+        List<Borrowing> overdue = borrowingDAO.findOverdue();
+        assertTrue(overdue.stream().anyMatch(b -> b.getId() == testBorrowing.getId()));
     }
 
     @Test
-    void deleteRemovesGenre() throws SQLException {
-        Genre genre = genreDAO.create(new Genre(0, "Test Genre - Delete"));
-        int id = genre.getId();
-
-        genreDAO.delete(genre);
-        assertNull(genreDAO.get(id));
-        testGenre = null; // already gone, nothing left to clean up
+    void findOverdueExcludesFutureDueDate() throws SQLException {
+        testBorrowing = borrowingDAO.create(newTestBorrowing(LocalDate.now().plusDays(14)));
+        List<Borrowing> overdue = borrowingDAO.findOverdue();
+        assertFalse(overdue.stream().anyMatch(b -> b.getId() == testBorrowing.getId()));
     }
 
     @Test
-    void findByNameLocatesExistingGenre() throws SQLException {
-        testGenre = genreDAO.create(new Genre(0, "Test Genre - FindByName"));
-        Genre found = genreDAO.findByName("Test Genre - FindByName");
-        assertNotNull(found);
-        assertEquals(testGenre.getId(), found.getId());
-    }
+    void deleteRemovesBorrowing() throws SQLException {
+        Borrowing b = borrowingDAO.create(newTestBorrowing(LocalDate.now().plusDays(14)));
+        int id = b.getId();
 
-    @Test
-    void findByNameReturnsNullWhenNotFound() throws SQLException {
-        assertNull(genreDAO.findByName("Definitely Not A Real Genre 12345"));
+        borrowingDAO.delete(b);
+        assertNull(borrowingDAO.get(id));
+        testBorrowing = null;
     }
 }
