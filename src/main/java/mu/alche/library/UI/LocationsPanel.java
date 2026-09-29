@@ -159,7 +159,7 @@ public class LocationsPanel {
 
 
         buttonPanel.setPreferredSize(
-                new Dimension(150, 0)
+                new Dimension(250, 0)
         );
 
 
