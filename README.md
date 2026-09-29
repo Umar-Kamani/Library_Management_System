@@ -66,23 +66,27 @@ Test results are written to `target/surefire-reports/`.
 This produces a self-contained application that bundles its own Java
 runtime, so it runs on a machine without Java installed.
 
-1. Build the shaded JAR:
+1. Build the JAR:
 ```bash
-   mvn clean package
+   Go to Intelij Project Structure
+   Go to Artifact
+   Click the + icon and select JAR
+   Select From Modules with Dependencies
+   Select Main class and build Artifact
+   
 ```
-2. Run `jpackage` (included with the JDK, no separate install needed):
-```bash
-   jpackage --type app-image ^
-     --input target ^
-     --dest dist ^
-     --name LibraryManagementSystem ^
-     --main-jar Library_Management_System-1.0-SNAPSHOT.jar ^
-     --main-class mu.alche.library.App.Launcher
+2. Run `Launch4j` (a separate install needed):
 ```
-   (On macOS/Linux, replace the `^` line continuations with `\`.)
-3. The result is a folder under `dist/LibraryManagementSystem/` containing
-   a native launcher — this folder can be copied to and run on any machine
-   of the same OS, with no Java installation required.
+    Locate the JAR file and copy it to a new directory
+    Copy the JRE from Java system files and add it to the new directory
+    Open Launch4J and under Basic
+    Select the destination as the .EXE file to be created
+    Select the Source as the JAR File
+    Go to the JRE section and select the JRE Directory
+    Click the Gear Icon
+    A .EXE file will be generated in the working directory
+    
+```
 
 **Verified on:** Windows 11 Pro, version 25H2 (OS Build 26200.8875). Packaged app-image launches correctly; not yet tested on a machine without a separate Java installation.
 
